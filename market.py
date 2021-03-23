@@ -4,8 +4,8 @@ app = Flask(__name__)
 
 
 @app.route('/')
-@app.route('/inicio')
-def index():
+@app.route('/index')
+def pagina_inicial():
     return render_template('index.html')
 
 
