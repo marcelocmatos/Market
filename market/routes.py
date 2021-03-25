@@ -15,7 +15,7 @@ def loja():
     items = Item.query.all()
     return render_template('loja.html', itens=items)
 
-@app.route('/register')
-def register_page():
+@app.route('/cadastro')
+def cadastro():
     form = RegisterForm()
-    return render_template('register.html', form=form)
+    return render_template('cadastro.html', form=form)
