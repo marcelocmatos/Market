@@ -1,5 +1,6 @@
 from market import db, bcrypt, login_manager
 from flask_login import UserMixin
+import locale
 
 
 @login_manager.user_loader
@@ -14,6 +15,17 @@ class User(db.Model, UserMixin):
     password_hash = db.Column(db.String(length=60), nullable=False)
     budget = db.Column(db.Integer(), nullable=False, default=1000)
     items = db.relationship('Item', backref='owned_user', lazy=True)
+
+    @property
+    def corrige_formato_dinheiro(self):
+        if self.budget:
+            locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
+            valor = locale.currency(self.budget, grouping=True)
+            return valor
+        else:
+            locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
+            valor = locale.currency(self.budget, grouping=True)
+            return valor
 
     @property
     def password(self):
