@@ -2,7 +2,7 @@ from market import app, db
 from flask import render_template, redirect, url_for, flash
 from market.models import Item, User
 from market.forms import RegisterForm, LoginForm
-from flask_login import login_user
+from flask_login import login_user, logout_user
 
 
 @app.route('/')
@@ -46,3 +46,14 @@ def acesso():
             flash('Usuário ou senha incorretos, tente novamente', category='danger')
 
     return render_template('acesso.html', form=form)
+
+
+@app.route('/desconectar', methods=['GET', 'POST'])
+def desconectar():
+    logout_user()
+    flash('Você foi desconectado!', category='info')
+    return redirect(url_for('pagina_inicial'))
+
+@app.route('/sobre')
+def sobre():
+    return render_template('sobre.html')
