@@ -2,7 +2,7 @@ from market import app, db
 from flask import render_template, redirect, url_for, flash
 from market.models import Item, User
 from market.forms import RegisterForm, LoginForm
-from flask_login import login_user, logout_user
+from flask_login import login_user, logout_user, login_required
 
 
 @app.route('/')
@@ -12,6 +12,7 @@ def pagina_inicial():
 
 
 @app.route('/loja')
+@login_required
 def loja():
     items = Item.query.all()
     return render_template('loja.html', itens=items)
@@ -26,6 +27,8 @@ def cadastro():
                              password=form.password1.data)
         db.session.add(criar_usuario)
         db.session.commit()
+        login_user(criar_usuario)
+        flash(f'Conta criada com sucesso e você está acessando como: {criar_usuario.username}', category='success')
         return redirect(url_for('loja'))
     if form.errors != {}:  # se não tiver erro de validação
         for err_msg in form.errors.values():
@@ -40,7 +43,7 @@ def acesso():
         tentiva_usuario = User.query.filter_by(username=form.username.data).first()
         if tentiva_usuario and tentiva_usuario.verifica_password(tentiva_acesso=form.password.data):
             login_user(tentiva_usuario)
-            flash(f'Bem vindo a Curitibread. Voce está acessando como {tentiva_usuario.username}', category='success')
+            flash(f'Bem vindo a Curitibread. Você está acessando como {tentiva_usuario.username}', category='success')
             return redirect(url_for('loja'))
         else:
             flash('Usuário ou senha incorretos, tente novamente', category='danger')
@@ -53,6 +56,7 @@ def desconectar():
     logout_user()
     flash('Você foi desconectado!', category='info')
     return redirect(url_for('pagina_inicial'))
+
 
 @app.route('/sobre')
 def sobre():
