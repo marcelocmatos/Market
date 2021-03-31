@@ -29,7 +29,16 @@ class ProductForm(FlaskForm):
     descricao = StringField(label='Confirme a Senha:')
     opcoes = StringField(label='Criar Conta')
 
+
 class LoginForm(FlaskForm):
     username = StringField(label='Usuário', validators=[DataRequired()])
     password = PasswordField(label='Senha', validators=[DataRequired()])
     submit = SubmitField(label='Entrar')
+
+
+class PurchaseItemForm(FlaskForm):
+    submit = SubmitField(label='Comprar')
+
+
+class SellItemForm(FlaskForm):
+    submit = SubmitField(label='Vender')

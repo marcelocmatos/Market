@@ -22,7 +22,7 @@ Curitibread - Loja
             </thead>
             <tbody>
             <!-- Your rows inside the table HERE: -->
-                {% for item in itens %}
+                {% for item in items %}
                 {% include 'includes/items_modals.html' %}
                     <tr>
                        <td>{{ item.id }}</td>
@@ -30,8 +30,8 @@ Curitibread - Loja
                        <td>{{ item.barcode }}</td>
                        <td>R$ {{ item.price }},00</td>
                        <td>
-                          <button class="btn btn-outline btn-info" data-toggle="modal" data-target="#Modal-MoreInfo-{{ item.id }}">Mais Informações</button>
-                          <button class="btn btn-outline btn-success">Comprar</button>
+                          <button class="btn btn-outline-info" data-toggle="modal" data-target="#Modal-MoreInfo-{{ item.id }}">Mais Informações</button>
+                          <button class="btn btn-outline-success" data-toggle="modal" data-target="#Modal-COnfirmaCompra-{{ item.id }}">Comprar</button>
                        </td>
                     </tr>
                 {% endfor %}

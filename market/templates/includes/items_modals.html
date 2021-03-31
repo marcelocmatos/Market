@@ -1,10 +1,10 @@
 <style>
   .modal-content {
-    background-color: #212121
+          background-color: #212121
   }
 </style>
 
-<!-- More Info -->
+<!-- Descrição -->
 <div class="modal fade" id="Modal-MoreInfo-{{ item.id }}"
      tabindex="-1"
      aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -17,23 +17,23 @@
         </h5>
         <button type="button" class="close"
                 data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
+          <span aria-hidden="true">*</span>
         </button>
       </div>
       <div class="modal-body">
-        {{ item.description }}
+        <h5>{{ item.description }}</h5>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary"
-                data-dismiss="modal">Close
+        <button type="button" class="btn btn-outline-secondary"
+                data-dismiss="modal">Fechar
         </button>
       </div>
     </div>
   </div>
 </div>
 
-<!-- Purchase Confirm -->
-<div class="modal fade" id="Modal-PurchaseConfirm-{{ item.id }}"
+<!-- Confirmação de Comprar -->
+<div class="modal fade" id="Modal-COnfirmaCompra-{{ item.id }}"
      tabindex="-1"
      aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
@@ -45,15 +45,23 @@
         </h5>
         <button type="button" class="close"
                 data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
+          <span aria-hidden="true">*</span>
         </button>
       </div>
       <div class="modal-body">
-        Are you sure you want to buy {{ item.name }} for {{ item.price }}$ ?
+        <form method="POST">
+          {{ formulario_compra.hidden_tag() }}
+          <h5 class="text-center">
+            Confirma a compra do item {{ item.name }} por R${{ item.price }},00?
+          </h5>
+          <br>
+          <input id="item_comprado" name="item_comprado" type="hidden" value="{{item.name}}">
+          {{ formulario_compra.submit(class="btn btn-outline-success btn-block") }}
+        </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary"
-                data-dismiss="modal">Close
+        <button type="button" class="btn btn-outline-secondary"
+                data-dismiss="modal">Fechar
         </button>
       </div>
     </div>
