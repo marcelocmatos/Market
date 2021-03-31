@@ -19,13 +19,18 @@ def loja():
 		item_comprado = request.form.get('item_comprado')
 		c_item_object = Item.query.filter_by(name=item_comprado).first()
 		if c_item_object:
-			c_item_object.owner = current_user.id
-			current_user.budget -= c_item_object.price
-			db.session.commit()
-			flash(f'Parabéns! Você acabou de adquirir: {c_item_object.name} por {c_item_object.price}')
-	items = Item.query.filter_by(owner=None)
+			if current_user.pode_comprar(c_item_object):
+				c_item_object.owner = current_user.id
+				current_user.budget -= c_item_object.price
+				db.session.commit()
+				flash(f'Parabéns! Você acabou de adquirir: {c_item_object.name} por {c_item_object.price}', category='success')
+			else:
+				flash(f'O seu saldo não é suficiente para comprar {c_item_object.name}', category='danger')
+		return redirect(url_for('loja'))
 
-	return render_template('loja.html', items=items, formulario_compra=formulario_compra)
+	if request.method == 'GET':
+		items = Item.query.filter_by(owner=None)
+		return render_template('loja.html', items=items, formulario_compra=formulario_compra)
 
 
 @app.route('/cadastro', methods=['GET', 'POST'])

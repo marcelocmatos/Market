@@ -38,6 +38,9 @@ class User(db.Model, UserMixin):
     def verifica_password(self, tentiva_acesso):
         return bcrypt.check_password_hash(self.password_hash, tentiva_acesso)
 
+    def pode_comprar(self, item_obj):
+        return self.budget >= item_obj.price
+
 
 class Item(db.Model):
     id = db.Column(db.Integer(), primary_key=True)
