@@ -1,7 +1,7 @@
 from market import app, db
 from flask import render_template, redirect, url_for, flash, request
-from market.models import Item, User
-from market.forms import RegisterForm, LoginForm, PurchaseItemForm
+from market.models import Item, User, Corrigir
+from market.forms import RegisterForm, LoginForm, PurchaseItemForm, SellItemForm
 from flask_login import login_user, logout_user, login_required, current_user
 
 
@@ -15,22 +15,40 @@ def pagina_inicial():
 @login_required
 def loja():
 	formulario_compra = PurchaseItemForm()
+	formulario_venda = SellItemForm()
 	if request.method == 'POST':
+
+		# Logica da Compra
 		item_comprado = request.form.get('item_comprado')
 		c_item_object = Item.query.filter_by(name=item_comprado).first()
 		if c_item_object:
 			if current_user.pode_comprar(c_item_object):
-				c_item_object.owner = current_user.id
-				current_user.budget -= c_item_object.price
-				db.session.commit()
-				flash(f'Parabéns! Você acabou de adquirir: {c_item_object.name} por {c_item_object.price}', category='success')
+				c_item_object.comprar(current_user)
+				compra_corrigida = Corrigir.corrige_formato_dinheiro(c_item_object.price)
+				flash(f'Parabéns! Você acabou de adquirir: {c_item_object.name} por {compra_corrigida}', category='success')
 			else:
 				flash(f'O seu saldo não é suficiente para comprar {c_item_object.name}', category='danger')
+
+		# Lógica da Venda
+		item_devolvido = request.form.get('item_vendido')
+		d_item_object = Item.query.filter_by(name=item_devolvido).first()
+		if d_item_object:
+			if current_user.pode_devolver(d_item_object):
+				d_item_object.vender(current_user)
+				venda_corrigida = Corrigir.corrige_formato_dinheiro(d_item_object.price)
+				flash(f'Você acabou de devolver o item: {d_item_object.name} e teve uma devolução de {venda_corrigida}',
+				      category='success')
+			else:
+				flash(f'Alguma coisa ocorreu de errado na devolução do item {c_item_object.name}. Contate o padeiro.',
+				      category='danger')
+
 		return redirect(url_for('loja'))
 
 	if request.method == 'GET':
 		items = Item.query.filter_by(owner=None)
-		return render_template('loja.html', items=items, formulario_compra=formulario_compra)
+		items_adquiridos = Item.query.filter_by(owner=current_user.id)
+		return render_template('loja.html', items=items, formulario_compra=formulario_compra,
+		                       items_adquiridos=items_adquiridos, formulario_venda=formulario_venda)
 
 
 @app.route('/cadastro', methods=['GET', 'POST'])

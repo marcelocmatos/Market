@@ -41,6 +41,9 @@ class User(db.Model, UserMixin):
     def pode_comprar(self, item_obj):
         return self.budget >= item_obj.price
 
+    def pode_devolver(self, item_obj):
+        return item_obj in self.items
+
 
 class Item(db.Model):
     id = db.Column(db.Integer(), primary_key=True)
@@ -52,3 +55,25 @@ class Item(db.Model):
 
     def __repr__(self):
         return f'Item{self.name}'
+
+    def comprar(self, usuario):
+        self.owner = usuario.id
+        usuario.budget -= self.price
+        db.session.commit()
+
+    def vender(self, usuario):
+        self.owner = None
+        usuario.budget += self.price
+        db.session.commit()
+
+
+class Corrigir:
+    def __init__(self, dinheiro):
+        self.dinheiro = dinheiro
+
+    def corrige_formato_dinheiro(self):
+        valor = self
+        valor = int(valor)
+        locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
+        valor = locale.currency(valor, grouping=True)
+        return valor

@@ -1,0 +1,44 @@
+<!-- Confirmação de Comprar -->
+<style>
+  .modal-content {
+          background-color: #212121
+  }
+</style>
+
+<div class="modal fade" id="Modal-ConfirmaVenda-{{ item_adquirido.id }}"
+     tabindex="-1"
+     aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="ModalLabel">
+          <!-- -->
+          {{ item_adquirido.name }}
+        </h5>
+        <button type="button" class="close"
+                data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">*</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form method="POST">
+          {{ formulario_venda.hidden_tag() }}
+          <h5 class="text-center">
+            Confirma a devolução do item {{ item_adquirido.name }} por R${{ item_adquirido.price }},00?
+          </h5>
+          <br>
+            <h6>
+                Clicando em devolver, você estrá desistindo da compra do item {{ item_adquirido.name }}.
+            </h6>
+          <input id="item_vendido" name="item_vendido" type="hidden" value="{{item_adquirido.name}}">
+          {{ formulario_venda.submit(class="btn btn-outline-danger btn-block") }}
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary"
+                data-dismiss="modal">Cancelar Devolução
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -3,45 +3,60 @@
 Curitibread - Loja
 {% endblock %}
 {% block content%}
-
 <div class="row" style="margin-top:20px; margin-left:20px">
    <div class="col-8">
-       <h2>Itens disponíveis na Boulangerie</h2>
-       <p>Clique em um para adquiri-lo</p>
-       <br>
-        <table class="table table-hover table-dark">
-             <thead>
-                <tr>
-                    <!-- Your Columns HERE -->
-                    <th scope="col">#</th>
-                    <th scope="col">Nome</th>
-                    <th scope="col">Código de Barras</th>
-                    <th scope="col">Preço</th>
-                    <th scope="col">Opções</th>
-                </tr>
-            </thead>
-            <tbody>
+      <h2>Itens disponíveis na Boulangerie</h2>
+      <p>Clique em um para adquiri-lo</p>
+      <br>
+      <table class="table table-hover table-dark">
+         <thead>
+            <tr>
+               <!-- Your Columns HERE -->
+               <th scope="col">#</th>
+               <th scope="col">Nome</th>
+               <th scope="col">Código de Barras</th>
+               <th scope="col">Preço</th>
+               <th scope="col">Opções</th>
+            </tr>
+         </thead>
+         <tbody>
             <!-- Your rows inside the table HERE: -->
-                {% for item in items %}
-                {% include 'includes/items_modals.html' %}
-                    <tr>
-                       <td>{{ item.id }}</td>
-                       <td>{{ item.name }}</td>
-                       <td>{{ item.barcode }}</td>
-                       <td>R$ {{ item.price }},00</td>
-                       <td>
-                          <button class="btn btn-outline-info" data-toggle="modal" data-target="#Modal-MoreInfo-{{ item.id }}">Mais Informações</button>
-                          <button class="btn btn-outline-success" data-toggle="modal" data-target="#Modal-COnfirmaCompra-{{ item.id }}">Comprar</button>
-                       </td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+            {% for item in items %}
+            {% include 'includes/items_modals.html' %}
+            <tr>
+               <td>{{ item.id }}</td>
+               <td>{{ item.name }}</td>
+               <td>{{ item.barcode }}</td>
+               <td>R$ {{ item.price }},00</td>
+               <td>
+                  <button class="btn btn-outline-info" data-toggle="modal" data-target="#Modal-MoreInfo-{{ item.id }}">Mais Informações</button>
+                  <button class="btn btn-outline-success" data-toggle="modal" data-target="#Modal-ConfirmaCompra-{{ item.id }}">Comprar</button>
+               </td>
+            </tr>
+            {% endfor %}
+         </tbody>
+      </table>
    </div>
    <div class="col-4">
-       <h2>Minhas Compras</h2>
-       <p>Clique no botão Vender para disponibilizar o item no mercado novamente</p>
-       <br>
+      <h2>Minhas Compras</h2>
+      <p>Clique no botão Vender para disponibilizar o item no mercado novamente</p>
+      <br>
+      <div class="row">
+         {% for item_adquirido in items_adquiridos %}
+         {% include 'includes/itens_possuidos_modals.html' %}
+         <div class="com-md-6">
+            <div style="margin-bottom: 5px" class="card text-center bg-dark">
+               <div class="card-body">
+                  <h5 class="card-title">{{item_adquirido.name}}</h5>
+                  <button type="button" class="btn btn-outline-danger" style="margin-bottom: 5px" data-toggle="modal" data-target="#Modal-ConfirmaVenda-{{ item_adquirido.id }}">
+                  Devolver Item
+                  </button>
+                  <p class="card-text"><strong>Este item custou R${{ item_adquirido.price }},00</strong></p>
+               </div>
+            </div>
+         </div>
+         {% endfor %}
+      </div>
    </div>
 </div>
 {% endblock %}

@@ -24,6 +24,13 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\market\templates\includes\items_modals.html">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\requirements.txt">
           <value>
             <Attribute>
